@@ -635,34 +635,59 @@
             document.getElementById('gallery-3'),
             document.getElementById('gallery-4')
         ];
+    });
 
-        // Add click event to each image for file upload
-        imageElements.forEach(img => {
-            if (img) {
-                img.style.cursor = 'pointer';
-                img.title = 'Нажмите, чтобы загрузить изображение';
+    // Function to make POST request
+    function submitUserData(name, phone, email) {
+        return fetch('http://localhost:8080/user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                phone: phone,
+                email: email
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                throw error;
+            });
+    }
 
-                img.addEventListener('click', function() {
-                    const fileInput = document.createElement('input');
-                    fileInput.type = 'file';
-                    fileInput.accept = 'image/*';
+    // Add event listener when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('.question-form form');
 
-                    fileInput.onchange = function(e) {
-                        const file = e.target.files[0];
-                        if (file) {
-                            const reader = new FileReader();
-                            reader.onload = function(event) {
-                                img.src = event.target.result;
-                            };
-                            reader.readAsDataURL(file);
-                        }
-                    };
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
 
-                    fileInput.click();
+            // Get input values
+            const nameInput = form.querySelector('input[placeholder="Имя"]');
+            const phoneInput = form.querySelector('input[placeholder="Телефон"]');
+            const emailInput = form.querySelector('input[placeholder="Email"]');
+
+            // Call the submitUserData function
+            submitUserData(nameInput.value, phoneInput.value, emailInput.value)
+                .then(response => {
+                    console.log('Success:', response);
+                    alert('Данные успешно отправлены!');
+                    form.reset(); // Clear the form
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Произошла ошибка при отправке данных. Пожалуйста, попробуйте снова.');
                 });
-            }
         });
     });
+
 </script>
 </body>
 </html>
