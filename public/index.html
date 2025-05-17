@@ -676,12 +676,12 @@
             submitUserData(nameInput.value, phoneInput.value, emailInput.value)
                 .then(response => {
                     console.log('Success:', response);
-                    alert('Данные успешно отправлены!');
+                    alert('Your details were sent successfully. We will contact you shortly!');
                     form.reset(); // Clear the form
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Произошла ошибка при отправке данных. Пожалуйста, попробуйте снова.');
+                    alert('An error occurred. Please try again later.');
                 });
         });
     });
